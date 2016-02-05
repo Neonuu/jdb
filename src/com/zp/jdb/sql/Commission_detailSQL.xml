@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.CommissionDetailDao">
+    
+	 <select id="findAllByLimit" resultType="com.zp.jdb.entity.Commission_detail" parameterType="map">
+	          select * from  commission_detail where user_id=${user_id}  and is_del=0 order by add_time  desc limit #{number}, #{pageSize}
+	 </select>
+	 
+	 <select id="findAll" resultType="int" parameterType="map">
+        select count(*) from  commission_detail  where user_id=${user_id}  and is_del=0  
+     </select>
+	
+	 <insert id="addCommissionChangeRecord" parameterType="com.zp.jdb.entity.Commission_detail">
+	     insert into commission_detail(user_id,change_amount,balance,add_time,bank_number,state)
+	       values(#{user_id},#{change_amount},#{balance},#{add_time},#{bank_number},#{state})
+	 </insert>
+	 
+	 
+	 
+	 <select id="findTiXianAllByLimit" resultType="com.zp.jdb.entity.Commission_detail" parameterType="map">
+	          select * from  commission_detail where  state ='提现' and is_del=0 order by add_time  desc limit #{number}, #{pageSize}
+	 </select>
+	 
+	 <select id="findTiXianAll" resultType="int" parameterType="map">
+        select count(*) from  commission_detail  where  state ='提现' and is_del=0  
+     </select>
+	 
+	 <update id="updateSuccessTiXianById" parameterType="map" >
+	     update  commission_detail set state='提现打款成功' ,add_time=#{add_time} where id=#{id} and is_del=0
+	 </update>
+	 
+	 <select id="findById" resultType="com.zp.jdb.entity.Commission_detail" parameterType="long" >
+	     select * from  commission_detail where id=#{id} and is_del=0
+	 </select>
+</mapper>

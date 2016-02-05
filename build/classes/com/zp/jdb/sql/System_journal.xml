@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.System_JournalDao">
+    
+     <sql id="tiaoJian">
+        <if test="module != null and module != ''">
+			and module = #{module}
+		</if>
+		<if test="date != null and date != ''">
+			and date &lt; #{date2} and date &gt; #{date1} 
+		</if>
+     </sql>
+    
+    <select id="findJournalsByLimit" parameterType="map" resultType="com.zp.jdb.entity.System_Journal">
+      select * from system_Journal  <where>
+          <include refid="tiaoJian"/> and is_del=0 
+       </where>  order by date desc limit #{page}, #{pageSize}
+    </select>
+    
+    <select id="findJournalsAll" parameterType="map" resultType="int">
+      select count(*) from system_Journal 
+      <where>  <include refid="tiaoJian"/> and is_del=0 </where>
+    </select>
+    
+    <insert id="addJournal" parameterType="com.zp.jdb.entity.System_Journal">
+       insert into system_Journal(operation_content,module,date,operator,type) 
+       values(#{operation_content},#{module},#{date},#{operator},#{type})
+    </insert>
+</mapper>

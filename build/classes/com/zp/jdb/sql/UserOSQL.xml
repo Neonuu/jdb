@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.UserODao">
+    <select id="selectUserMessage" resultType="com.zp.jdb.entity.User" parameterType="com.zp.jdb.entity.User">
+    	select * from user u where isdel = 0
+    	<if test="user_id != null and user_id != ''">
+			and u.user_id = #{user_id}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and u.user_name like '%${user_name}%'
+		</if>
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and u.phoneNumber like '%${phoneNumber}%'
+		</if>
+		<if test="province != null and province != ''">
+			and u.province like '%${province}%'
+		</if>
+		<if test="city != null and city != ''">
+			and u.city like '%${city}%'
+		</if>
+		limit #{startIndex},#{pagecount}
+    </select>
+    <select id="selectUserCount" resultType="int">
+    	select count(*) from user u where isdel = 0
+    	<if test="user_id != null and user_id != ''">
+			and u.user_id = #{user_id}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and u.user_name like '%${user_name}%'
+		</if>
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and u.phoneNumber like '%${phoneNumber}%'
+		</if>
+		<if test="province != null and province != ''">
+			and u.province like '%${province}%'
+		</if>
+		<if test="city != null and city != ''">
+			and u.city like '%${city}%'
+		</if>
+    </select>
+    <update id="updateUserDong" parameterType="com.zp.jdb.entity.User">
+    	update user set user_status = 1 where user_id = #{user_id};
+    </update>
+    <update id="updateUserHui" parameterType="com.zp.jdb.entity.User">
+    	update user set user_status = 0 where user_id = #{user_id};
+    </update>
+    <select id="selectGeren" parameterType="com.zp.jdb.entity.User" resultType="com.zp.jdb.entity.User">
+    	select * from user where user_id = #{user_id};
+    </select>
+</mapper>

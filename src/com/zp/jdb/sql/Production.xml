@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.ProductionDao">
+	
+	<sql id="pro2_query_conditioin">
+	    statements != 4
+		<if test="orgId != null and orgId != ''">
+			and orgId = #{orgId}
+		</if>
+	</sql>
+	
+	<select id="selectProductionByOrgId" resultType="com.zp.jdb.entity.Production" parameterType="map">
+		SELECT * FROM pro_list
+		<where>
+		  <include refid="pro2_query_conditioin"/>
+		</where>
+		limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+		<sql id="pro3_query_conditioin">
+	    statements != 4
+		<if test="orgId != null and orgId != ''">
+			and find_in_set(orgId,#{orgId})
+		</if>
+		<if test="proId != null and proId != ''">
+			and proId = #{proId}
+		</if>
+		<if test="proName != null and proName != ''">
+			and proName like '%${proName}%'
+		</if>
+		<if test="area != null and area != ''">
+			and area like '%${area}%'
+		</if>
+	</sql>
+	
+	<select id="selectProductionByOrgId3" resultType="com.zp.jdb.entity.Production" parameterType="map">
+		SELECT * FROM pro_list
+		<where>
+		  <include refid="pro3_query_conditioin"/>
+		</where>
+		limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+	 <sql id="pro_query_conditioin">
+	    statements != 4
+		<if test="proId != null and proId != ''">
+			and proId = #{proId}
+		</if>
+		<if test="proName != null and proName != ''">
+			and proName like '%${proName}%'
+		</if>
+		<if test="orgId != null and orgId != ''">
+			and orgId = #{orgId}
+		</if>
+		<if test="area != null and area != ''">
+			and area like '%${area}%'
+		</if>
+	</sql>
+	<select id="selectProductionsByCondition" resultType="com.zp.jdb.entity.Production" parameterType="map">
+		SELECT * FROM pro_list 
+		<where>
+		  <include refid="pro_query_conditioin"/>
+		</where> limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+	<select id="selectProductionsByCondition3" resultType="com.zp.jdb.entity.Production" parameterType="map">
+		SELECT * FROM pro_list 
+		<where>
+		  <include refid="pro3_query_conditioin"/>
+		</where> limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+	<update id="updateProductionIsdelByID" parameterType="map">
+		update pro_list set isdel = #{isdel} where proId = #{proId}
+	</update>
+	
+	<insert id="insertProduction" parameterType="map">
+    INSERT INTO pro_list (proName,fitPeople,rebateLimit,applyNum,checkListTime,loanAvgTime,area,isdel,orgId,statements) 
+    VALUES (#{proName},#{fitPeople},#{rebateLimit},#{applyNum},#{checkListTime},#{loanAvgTime},#{area},#{isdel},#{orgId},1)
+    </insert>
+    
+    <select id="selectProductionByID" resultType="com.zp.jdb.entity.Production" parameterType="int">
+		SELECT * FROM pro_list where proId = #{proId}
+		
+	</select>
+	
+	<update id="updateProduction" parameterType="map">
+	    update pro_list  
+	    set proName = #{proName}, fitPeople = #{fitPeople}, rebateLimit = #{rebateLimit}, 
+	    applyNum = #{applyNum}, checkListTime = #{checkListTime}, loanAvgTime = #{loanAvgTime},
+	    area = #{area}, orgId = #{orgId}
+	    where proId = #{proId}
+	</update>
+	
+	<select id="selectProductionTotal" resultType="int" parameterType="map">
+	SELECT COUNT(*) from pro_list<where>
+		  <include refid="pro_query_conditioin"/>
+		</where>
+	</select>
+	
+		<select id="selectProductionTotal3" resultType="int" parameterType="map">
+	SELECT COUNT(*) from pro_list<where>
+		  <include refid="pro3_query_conditioin"/>
+		</where>
+	</select>
+	
+	<select id="countProductionByOrg" resultType="int" parameterType="int">
+	SELECT COUNT(*) from pro_list where orgId = #{orgId} and statements = 2
+	</select>
+	
+	<update id="updateProductionState2ByID" parameterType="map">
+		update pro_list set statements = 2 where proId = #{proId}
+	</update>
+	
+	<update id="updateProductionStateByID" parameterType="map">
+		update pro_list set statements = #{statements} where proId = #{proId}
+	</update>
+	
+	<select id="selectMaxRebate" resultType="Double" parameterType="int">
+	  select MAX(rebateLimit) FROM pro_list where orgId = #{orgId} and statements = 2
+	</select>
+	
+	<select id="findAllProductions" resultType="com.zp.jdb.entity.Production">
+	   select * from pro_list where statements=2 and isdel=0
+	</select>
+	
+	<update id="updateProductionIsdelByOrg" parameterType="map">
+		update pro_list set isdel = 1, statements = 4 where orgId = #{orgId}
+	</update>
+	
+	
+
+</mapper>

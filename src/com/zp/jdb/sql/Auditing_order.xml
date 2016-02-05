@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.Auditing_orderDao">
+
+   <sql id="tiaoJian">
+		<if test="user_phoneNumber != null and user_phoneNumber != ''">
+			and user_phoneNumber like '%${user_phoneNumber}%'
+		</if>
+		<if test="order_number != null and order_number != ''">
+			and order_number like '%${order_number}%'
+		</if>
+		<if test="user_identity != null and user_identity != ''">
+			and user_identity = #{user_identity}
+		</if>
+		<if test="product != null and product != ''">
+			and product like '%${product}%'
+		</if>
+		<if test="user_idCardNumber != null and user_idCardNumber != ''">
+			and user_idCardNumber like '%${user_idCardNumber}%'
+		</if>
+		<if test="true_name != null and true_name != ''">
+			and true_name like '%${true_name}%'
+		</if>
+		<if test="province != null and province != ''">
+			and province like '%${province}%'
+		</if>
+		<if test="city != null and city != ''">
+			and city like '%${city}%'
+		</if>
+		<if test="add_time != null and add_time != ''">
+			and add_time &lt; #{add_time2} and add_time &gt; #{add_time1} 
+		</if>
+		<if test="auditer_name != null and auditer_name != ''">
+			and auditer_name like '%${auditer_name}%'
+		</if>
+		<if test="jigou_id != null">
+		    and find_in_set(jigou_id, #{jigou_id})
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+	</sql>
+
+
+   <select id="findAllByLimit" resultType="com.zp.jdb.entity.Auditing_order" parameterType="map">
+        select * from  auditing_order <where>
+          <include refid="tiaoJian"/> and is_del=0  
+        </where> order by add_time  desc limit #{number}, #{pageSize}
+   </select>
+    
+   <select id="findAll" resultType="int" parameterType="map">
+        select count(*) from  auditing_order <where> 
+        <include refid="tiaoJian"/> and is_del=0  </where>
+   </select>
+   
+   <select id="findById" parameterType="long" resultType="com.zp.jdb.entity.Auditing_order">
+         select * from auditing_order where id=#{id} and is_del=0
+   </select>
+   
+   <insert id="saveAuditOrder" parameterType="com.zp.jdb.entity.Order_inHours">
+       insert into auditing_order(user_id,user_phoneNumber,order_number,user_identity,product,true_name,user_idCardNumber,tel_number,province,city,add_time,auditer_name,status,jigou_id)
+         values(#{user_id},#{user_phoneNumber},#{order_number},#{user_identity},#{product},#{true_name},#{user_idCardNumber},#{tel_number},#{province},#{city},#{add_time},#{auditer_name},#{status},#{jigou_id})
+   </insert>
+   
+   <delete id="delAuditingOrderById" parameterType="long">
+       delete from auditing_order  where id=#{id};
+    </delete>
+   
+   <update id="updateAuditingOrderById" parameterType="com.zp.jdb.entity.Auditing_order">
+        update  auditing_order set status=#{status},add_time=#{add_time},auditer_name=#{auditer_name} where id=#{id} 
+   </update>
+ 
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+ <!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.TixianDao">
+    
+    <sql id="tixian_query_conditioin">
+        is_del = 0 and state = '提现'
+		<if test="user_id != null and user_id != ''">
+			and find_in_set(user_id, #{user_id})
+		</if>
+		<if test="mark != null and mark != ''">
+			and mark = #{mark}
+		</if>
+
+	</sql>
+	<select id="selectTixian" resultType="com.zp.jdb.entity.Commission_detail" parameterType="map">
+		SELECT * FROM commission_detail <where>
+		  <include refid="tixian_query_conditioin"/>
+		</where> order by mark, add_time desc limit #{pageIndex} ,#{pageSize} 
+	</select>
+	
+		<select id="selectTixianTotal" resultType="int" parameterType="map">
+	SELECT COUNT(*) from commission_detail<where>
+		  <include refid="tixian_query_conditioin"/>
+		</where>
+	</select>	
+	
+    <update id="updateTixianMark" parameterType="map">
+		update commission_detail set mark = #{mark} where id = #{id}
+	</update>
+	
+	<update id="updateTixianMarkAndReason" parameterType="map">
+		update commission_detail set mark = #{mark}, reason = #{reason} where id = #{id}
+	</update>
+	
+	<select id="selectUserByID" resultType="com.zp.jdb.entity.User" parameterType="Long">
+		SELECT * FROM user where user_id = #{user_id}  
+	</select>
+	
+	<select id="selectUserByName" resultType="com.zp.jdb.entity.User" parameterType="com.zp.jdb.entity.User">
+		SELECT * FROM user where user_name like '%${user_name}%' 
+	</select>
+	
+	<select id="selectmoneybyid" parameterType="Long" resultType="com.zp.jdb.entity.Commission_detail">
+		select user_id, change_amount from commission_detail where id = #{id}
+	</select>
+</mapper>

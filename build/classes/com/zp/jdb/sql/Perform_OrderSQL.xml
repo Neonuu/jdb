@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.PerformDao">
+	<select id="Statistics" resultType="com.zp.jdb.entity.Perform_order" parameterType="com.zp.jdb.entity.Perform_order">
+		select user_id, true_name, COUNT(order_number) c,SUM(money) s, DATE_FORMAT(t.add_time,'%Y-%m') month from order_inhours t
+         where t.status in (3,4) and is_del = 0
+         <if test="add_time != null and add_time != ''">
+			and DATE_FORMAT(t.add_time,'%Y-%m') = #{add_time}
+		</if>
+         group by user_id,month order by DATE_FORMAT(t.add_time,'%Y-%m')
+         
+         limit #{startIndex},#{pagecount}
+	</select>
+	<select id="SelectTotalCount" resultType="int" parameterType="com.zp.jdb.entity.Perform_order">
+		select count(distinct t.user_id) from order_inhours t  where t.status in(3,4) and is_del = 0
+		<if test="add_time != null and add_time != ''">
+			and DATE_FORMAT(t.add_time,'%Y-%m') = #{add_time}
+		</if> 	
+	</select>
+</mapper>

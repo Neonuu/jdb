@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.ProductionDetailDao">
+	<select id="selectProductionDetailByID" resultType="com.zp.jdb.entity.ProductionDetail" parameterType="int">
+	select * from product_detail 
+	where proId = #{proId}
+	</select>
+	<update id="updateProductionDetail" parameterType="map">
+	    update product_detail  
+	    set orgId=#{orgId}, proType = #{proType}, deadline = #{deadline}, 
+	    limitScope = #{limitScope}, synthesisRate = #{synthesisRate}, repaymentMode = #{repaymentMode},
+	    fitPeople = #{fitPeople}, applyCondition = #{applyCondition}, materialRequested = #{materialRequested},
+	    creditRequest = #{creditRequest},proFeature = #{proFeature}, creditEnquiryCost = #{creditEnquiryCost},
+	    doorServiceCost = #{doorServiceCost}, loanHandCost = #{loanHandCost}, isdel = #{isdel} where proId = #{proId}
+	</update>
+	<select id="countProductionDetailById" parameterType="int" resultType="int">
+	SELECT COUNT(*) from product_detail where proId = #{proId}
+	</select>
+	<insert id="insertProductionDetail" parameterType="map">
+    INSERT INTO product_detail (proId,orgId,proType,deadline,limitScope,synthesisRate,repaymentMode,fitPeople,applyCondition,materialRequested,creditRequest,proFeature,creditEnquiryCost,doorServiceCost,loanHandCost,isdel) 
+    VALUES (#{proId},#{orgId},#{proType},#{deadline},#{limitScope},#{synthesisRate},#{repaymentMode},#{fitPeople},#{applyCondition},#{materialRequested},#{creditRequest},#{proFeature},#{creditEnquiryCost},#{doorServiceCost},#{loanHandCost},#{isdel})
+    </insert>
+
+
+</mapper>

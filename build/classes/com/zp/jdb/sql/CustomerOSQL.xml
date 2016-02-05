@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.CustomerODao">
+    <select id="selectkehu" parameterType="com.zp.jdb.entity.CustomerO" resultType="com.zp.jdb.entity.CustomerO">
+    	select * from customer c
+		join customer_user cu on (c.id = cu.customer_id)
+		where cu.user_id = #{user_id} and c.isdel = 0 and cu.isdel = 0
+		<if test="customer_name != null and customer_name != ''">
+			and c.customer_name like '%${customer_name}%'
+		</if>
+		<if test="phone != null and phone != ''">
+			and c.phone like '%${phone}%'
+		</if>
+		<if test="passport != null and passport != ''">
+			and c.passport like '%${passport}%'
+		</if>
+		limit #{startIndex}, #{pagecount}
+    </select>
+    <select id="selectkehufy" resultType="int" parameterType="com.zp.jdb.entity.CustomerO">
+    	select count(*) from customer c
+		join customer_user cu on (c.id = cu.customer_id)
+		where cu.user_id = #{user_id} and c.isdel = 0 and cu.isdel = 0
+		<if test="customer_name != null and customer_name != ''">
+			and c.customer_name like '%${customer_name}%'
+		</if>
+		<if test="phone != null and phone != ''">
+			and c.customer_name like '%${customer_name}%'
+		</if>
+		<if test="passport != null and passport != ''">
+			and c.customer_name like '%${customer_name}%'
+		</if>
+    </select>
+    <select id="selectkehuxinxi" resultType="com.zp.jdb.entity.CustomerO" parameterType="com.zp.jdb.entity.CustomerO">
+    	select * from customer where id = #{id} and isdel = 0;
+    </select>
+    <update id="updatekehu" parameterType="com.zp.jdb.entity.CustomerO">
+    	update customer set customer_name = #{customer_name}, passport = #{passport}, company_info = #{company_info},
+    	house_info = #{house_info}, car_info = #{car_info}, email = #{email}, phone = #{phone}, img = #{img}, add_time = #{add_time}
+    	where id = #{id}
+    	and isdel = 0;
+    </update>
+    <select id="selectAllKehu" resultType="com.zp.jdb.entity.CustomerO" parameterType="com.zp.jdb.entity.CustomerO">
+    	select * from customer c where c.isdel = 0
+    	<if test="customer_name != null and customer_name != ''">
+			and c.customer_name like '%${customer_name}%'
+		</if>
+		<if test="phone != null and phone != ''">
+			and c.phone like '%${phone}%'
+		</if>
+		order by c.add_time desc limit #{startIndex}, #{pagecount}
+    </select>
+    <select id="selectAllKehuFY" resultType="int" parameterType="com.zp.jdb.entity.CustomerO">
+    	select count(*) from customer c where c.isdel = 0
+    	<if test="customer_name != null and customer_name != ''">
+			and c.customer_name like '%${customer_name}%'
+		</if>
+		<if test="phone != null and phone != ''">
+			and c.phone like '%${phone}%'
+		</if>
+    </select>
+</mapper>

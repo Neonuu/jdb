@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.OrderOutHoursDao">
+    
+    <sql id="tiaoJian">
+		<if test="user_id != null and user_id != ''">
+			and user_id = #{user_id}
+		</if>
+		<if test="order_number != null and order_number != ''">
+			and order_number like '%${order_number}%'
+		</if>
+		<if test="user_identity != null and user_identity != ''">
+			and user_identity = #{user_identity}
+		</if>
+		<if test="product != null and product != ''">
+			and product like '%${product}%'
+		</if>
+		<if test="user_idCardNumber != null and user_idCardNumber != ''">
+			and user_idCardNumber like '%${user_idCardNumber}%'
+		</if>
+		<if test="true_name != null and true_name != ''">
+			and true_name like '%${true_name}%'
+		</if>
+		<if test="province != null and province != ''">
+			and province like '%${province}%'
+		</if>
+		<if test="city != null and city != ''">
+			and city like '%${city}%'
+		</if>
+		<if test="add_time != null and add_time != ''">
+			and add_time &lt; #{add_time2} and add_time &gt; #{add_time1} 
+		</if>
+	</sql>
+    
+    <select id="findAllByLimit" resultType="com.zp.jdb.entity.Order_outHours"  parameterType="map">
+       select * from order_outHours <where>
+          <include refid="tiaoJian"/> and is_del=0 and status=0
+       </where> order by add_time desc limit #{number} ,#{pageSize}
+    </select>
+	
+    <select id="findAll" resultType="int"  parameterType="map">
+       select count(*) from order_outHours  <where> 
+        <include refid="tiaoJian"/> and is_del=0  and status=0</where>
+    </select>
+    
+    
+    <select id="findById" resultType="com.zp.jdb.entity.Order_outHours"  parameterType="Long">
+       select * from order_outHours where id=#{id} and is_del=0 
+    </select>
+    
+    
+    <update id="changeStatusOrderOutHoursById" parameterType="Long">
+       update order_outHours set status=1 where id=#{id}
+    </update>
+    
+    <update id="changeStatusToLockOrderOutHoursById" parameterType="Long">
+       update order_outHours set status=0 where id=#{id}
+    </update>
+    
+    <update id="delOrderOutHoursById" parameterType="Long">
+       update order_outHours set status=1 where id=#{id}
+    </update>
+    
+    <update id="delOrderOutHoursByOrderNumber" parameterType="string">
+       update order_outHours set is_del=1 where order_number =#{order_number}
+    </update>
+    
+    <insert id="insertOrderInHoursOrder" parameterType="com.zp.jdb.entity.Order_inHours">
+      insert into order_outHours(user_id,order_number,user_identity,product,true_name,user_idCardNumber,tel_number,province,city,add_time,status,is_del)
+       values(#{user_id},#{order_number},#{user_identity},#{product},#{true_name},#{user_idCardNumber},#{tel_number},#{province},#{city},#{add_time},#{status},0)
+    </insert>
+</mapper>

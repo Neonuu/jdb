@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.CustomerRecordDao">
+	<select id="crselectCustomerRecordTotal" resultType="int" parameterType="map">
+	select count(*) from order_inhours <where>
+		  <include refid="record_query_conditioin"/>
+		</where>
+	</select>
+	
+	<sql id="record_query_conditioin">
+        is_del = 0 and status in (3,4,5)
+		<if test="true_name != null and true_name != ''">
+			and true_name like '%${true_name}%'
+		</if>
+		<if test="user_idCardNumber != null and user_idCardNumber != ''">
+			and user_idCardNumber = #{user_idCardNumber}
+		</if>
+		<if test="tel_number != null and tel_number != ''">
+			and tel_number = #{tel_number}
+		</if>
+	</sql>
+	<select id="selectRecordByCondition" resultType="com.zp.jdb.entity.Order_inHours" parameterType="map">
+	select * from order_inhours <where>
+		  <include refid="record_query_conditioin"/>
+		</where>limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+	<select id="selectOrder_inhoursByNum" resultType="com.zp.jdb.entity.Order_inHours" parameterType="map">
+	select * from order_inhours where order_number = #{order_number}
+		</select>
+	
+		<select id="selectCarRecordTotal" resultType="int" parameterType="map">
+	select count(*) from car c join order_inhours oi on c.order_number=oi.order_number <where>
+		  <include refid="car_query_conditioin"/>
+		</where>
+	</select>
+	
+	<select id="selectCar" resultType="com.zp.jdb.entity.Img_forcar" parameterType="map">
+	select * from img_forcar where order_number = #{order_number}
+	</select>
+	
+	<select id="selectCarByOrder_number" resultType="com.zp.jdb.entity.Car" parameterType="map">
+	select * from car where order_number = #{order_number}
+	</select>
+	
+	<sql id="car_query_conditioin">
+	    oi.status in(3,4,5)
+		<if test="order_number != null and order_number != ''">
+			and order_number = #{order_number}
+		</if>
+		<if test="carframe != null and carframe != ''">
+			and c.Carframe = #{carframe}
+		</if>
+	</sql>
+	<select id="selectCarByCondition" resultType="com.zp.jdb.entity.Car" parameterType="map">
+	select c.* from car c join order_inhours oi on c.order_number=oi.order_number <where>
+		  <include refid="car_query_conditioin"/>
+		</where> limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+	<select id="selectHouseRecordTotal" resultType="int" parameterType="map">
+	select count(*) from housing h join order_inhours oi on h.order_number=oi.order_number <where>
+		  <include refid="house_query_conditioin"/>
+		</where>
+	</select>
+	
+	<select id="selectHouse" resultType="com.zp.jdb.entity.Img_forhouse" parameterType="map">
+	select * from img_forhouse where order_number = #{order_number}
+	</select>
+	
+	<select id="selectHouseByOrder_number" resultType="com.zp.jdb.entity.Housing" parameterType="map">
+	select * from housing where order_number = #{order_number}
+	</select>
+	
+	<sql id="house_query_conditioin">
+	    oi.status in(3,4,5)
+		<if test="order_number != null and order_number != ''">
+			and order_number = #{order_number}
+		</if>
+		<if test="housingFCZ != null and housingFCZ != ''">
+			and h.housingFCZ = #{housingFCZ}
+		</if>
+	</sql>
+	<select id="selectHouseByCondition" resultType="com.zp.jdb.entity.Housing" parameterType="map">
+	select h.* from housing h join order_inhours oi on h.order_number=oi.order_number  <where>
+		  <include refid="house_query_conditioin"/>
+		</where> limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+
+
+</mapper>

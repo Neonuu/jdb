@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.Auditing_order_recordDao">
+
+ 
+   <insert id="addRecord" parameterType="com.zp.jdb.entity.Auditing_order_record">
+       insert into auditing_order_record(order_number,status,add_time,user_id)
+       values(#{order_number},#{status},#{add_time},#{user_id})
+   </insert>
+
+
+    <select id="findAllByLimit" resultType="com.zp.jdb.entity.Auditing_order_record" parameterType="map">
+        select * from  auditing_order_record where  is_del=0  limit #{number}, #{pageSize}
+   </select>
+    
+   <select id="findAll" resultType="int" >
+        select count(*) from  auditing_order_record where is_del=0  
+   </select>
+
+   
+
+</mapper>

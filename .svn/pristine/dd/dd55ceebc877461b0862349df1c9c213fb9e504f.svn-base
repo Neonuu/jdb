@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+ <!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.CarInformationDao">
+    <insert id="insertCarInfo" parameterType="com.zp.jdb.entity.Car" >
+    	insert into car
+    	(CustomerID, Carbrand, Carxilie, CarModel, CarNiandai, Carframe, Cnotear, order_number, add_time)
+		values
+		( #{customerID}, #{carbrand}, #{carxilie}, #{carModel}, #{carNiandai}, #{carframe}, #{cnotear}, #{order_number}, #{add_time} );
+    </insert>
+    <update id="updateStatus" parameterType="long">
+    	update order_inhours set status_cailiao = 1 where id = #{id}
+    </update>
+    <select id="findBrand" resultType="com.zp.jdb.entity.B_Brand" >
+        select * from  brand where  isDel=0  
+   </select>
+   <select id="findSeries" resultType="com.zp.jdb.entity.S_Series" parameterType="int">
+        select * from  series where BID = #{id} and isDel = 0  
+   </select>
+    
+    <select id="findByOrderNumber" parameterType="string" resultType="com.zp.jdb.entity.Car">
+       select * from car where order_number=#{order_number} 
+    </select>
+    
+     <select id="findById" parameterType="int" resultType="com.zp.jdb.entity.B_Brand">
+       select * from brand where Id = #{id} and isDel = 0 
+    </select>
+    
+    <insert id="insertCarImg" parameterType="com.zp.jdb.entity.Img_forcar" >
+    	insert into img_forcar
+    	(img, order_number)
+		values
+		(#{img}, #{order_number});
+    </insert>
+    
+    <insert id="addname" parameterType="String">
+    	insert into brand (BName) values (#{BName});
+    </insert>
+    
+    <insert id="addxilie" parameterType="com.zp.jdb.entity.Series">
+    	insert into series (BID, Name) values (#{BID}, #{Name});
+    </insert>
+</mapper>
+
+
+
+
+

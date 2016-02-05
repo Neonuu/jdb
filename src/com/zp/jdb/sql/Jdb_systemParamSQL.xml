@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.Jdb_systemParameterDao">
+     <sql id="tiaoJian">
+        <if test="user_scale!=null and user_scale !=''">
+			user_scale = #{user_scale},
+		</if>
+		<if test="recommend_scale!=null and recommend_scale !=''">
+			recommend_scale = #{recommend_scale},
+		</if>
+		<if test="commission_quota !=null and commission_quota !='' ">
+			commission_quota = #{commission_quota},
+		</if>
+     </sql>
+  
+  
+	 <insert id="addSystemParam" parameterType="com.zp.jdb.entity.Jdb_systemParam">
+        insert into jdb_systemParam(user_scale,recommend_scale,commission_quota)
+         values(#{user_scale},#{recommend_scale},#{commission_quota})
+	 </insert>
+	 
+	 <update id="updateSystemParam"  parameterType="com.zp.jdb.entity.Jdb_systemParam">
+	     update  jdb_systemParam 
+	      <set>
+	         <include refid="tiaoJian"/>
+	      </set>
+	     
+	 </update>
+	 
+	 <select id="findById"  resultType="com.zp.jdb.entity.Jdb_systemParam">
+	      select * from jdb_systemParam  
+	 </select>
+	 
+</mapper>

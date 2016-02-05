@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.CommissionDao">
+    
+   <select id="findAllByLimit" resultType="com.zp.jdb.entity.Commission" parameterType="map">
+        select * from  commission where is_del=0 
+        <if test="user_id != null and user_id != ''">
+			and user_id = #{user_id}
+		</if>
+		<if test="balance1 != null">
+			and balance &gt;= #{balance1}
+		</if>
+		<if test="balance2 != null and balance2 != ''">
+			and balance &lt;= #{balance2}
+		</if>
+		<if test="total_balance1 != null">
+			and total_balance &gt;= #{total_balance1}
+		</if>
+		<if test="total_balance2 != null and total_balance2 != ''">
+			and total_balance &lt;= #{total_balance2}
+		</if>
+        limit #{number}, #{pageSize}
+   </select>
+    
+   <select id="findAll" resultType="int" parameterType="map">
+        select count(*) from  commission  where is_del=0 
+        <if test="user_id != null and user_id != ''">
+			and user_id = #{user_id}
+		</if>
+		<if test="balance1 != null">
+			and balance &gt; #{balance1}
+		</if>
+		<if test="balance2 != null and balance2 != ''">
+			and balance &lt; #{balance2}
+		</if>
+		<if test="total_balance1 != null">
+			and total_balance &gt;= #{total_balance1}
+		</if>
+		<if test="total_balance2 != null and total_balance2 != ''">
+			and total_balance &lt;= #{total_balance2}
+		</if>
+   </select>
+    
+    
+    <select id="findById"  resultType="com.zp.jdb.entity.Commission" parameterType="long">
+           SELECT * FROM commission WHERE user_id=#{user_id} and is_del=0
+    </select>
+    
+    
+    
+    <select id="findAllCommission" resultType="com.zp.jdb.entity.Commission">
+           SELECT * FROM commission where is_del=0
+    </select>
+    <update id="updateUserCanUseBalance" parameterType="com.zp.jdb.entity.Commission">
+          UPDATE commission SET can_use_balance=#{can_use_balance} WHERE user_id=#{user_id} and is_del=0;
+    </update>
+    
+     <update id="updateUserBalance" parameterType="com.zp.jdb.entity.Commission">
+          UPDATE commission SET balance=#{balance},can_use_balance=#{can_use_balance}, total_balance=#{total_balance}, recommended_balance=#{recommended_balance} WHERE user_id=#{user_id} and is_del=0;
+    </update>
+    
+    <update id="updateaddmoney" parameterType="com.zp.jdb.entity.Commission">
+    	update commission set balance = #{balance}, can_use_balance=#{can_use_balance} where user_id = #{user_id};
+    </update>
+   
+</mapper>

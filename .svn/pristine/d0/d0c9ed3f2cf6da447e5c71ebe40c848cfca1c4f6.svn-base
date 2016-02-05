@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.zp.jdb.dao.AlltableDao">
+	<select id="selectGroup" resultType="com.zp.jdb.entity.Alltable">
+		select * from groups where is_delete = 0;
+	</select>
+	<select id="selectGroupAndPower" resultType="com.zp.jdb.entity.Alltable">
+		select g.group_id, g.group_name, p.power_id, p.power_name, p.power_url from groups g
+		join group_power gp on (g.group_id = gp.group_id)
+		join powers p on(gp.power_id = p.power_id)
+		where g.is_delete = 0 and gp.is_delete = 0 and p.is_delete = 0;
+	</select>
+	<select id="selectID" resultType="int" parameterType="com.zp.jdb.entity.Alltable">
+		select count(*) from user_cando where user_id = #{user_id} and is_delete = 0;
+	</select>
+	<select id="selectAllpower" resultType="String" parameterType="com.zp.jdb.entity.Alltable">
+		select allpower_id from user_cando where user_id = #{user_id} and is_delete = 0;
+	</select>
+	<select id="selectAlloperate" resultType="String" parameterType="com.zp.jdb.entity.Alltable">
+		select alloperate_id from user_cando where user_id = #{user_id} and is_delete = 0;
+	</select>
+	<select id="selectUser_name" resultType="String" parameterType="com.zp.jdb.entity.Alltable">
+		select user_name from administrators where user_id = #{user_id} and isdel = 0;
+	</select>
+	<select id="selectInGroup" resultType="String" parameterType="String">
+		select group_id from group_power where power_id = #{power_id};
+	</select>
+	<select id="selectAdmin" resultType="int" parameterType="com.zp.jdb.entity.Alltable">
+		select admin from user_cando where user_id = #{user_id} and is_delete = 0;
+	</select>
+	<select id="selectOperateInPower" resultType="com.zp.jdb.entity.Alltable" parameterType="com.zp.jdb.entity.Alltable">
+		select o.* from operates o
+		join operates_powers op on(o.operate_id = op.operate_id)
+		join powers p on(p.power_id = op.power_id)
+		where p.power_id = #{power_id} and o.is_delete = 0 and p.is_delete = 0 and op.is_delete = 0;
+	</select>
+    <select id="selectAdministrator" resultType="com.zp.jdb.entity.Alltable" parameterType="com.zp.jdb.entity.Alltable">
+    	select distinct u.user_id,u.user_name,u.phoneNumber,u.email,uc.admin
+    	from administrators u
+		join user_cando uc on (u.user_id = uc.user_id)
+		where u.isdel = 0 and uc.is_delete = 0
+		<if test="user_id != null and user_id != ''">
+			and u.user_id = #{user_id}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and u.user_name like '%${user_name}%'
+		</if>
+		limit #{startIndex},#{pagecount}
+    </select>
+    <select id="selectAdminTotalCount" resultType="int" parameterType="com.zp.jdb.entity.Alltable">
+		SELECT count(DISTINCT u.user_id) FROM administrators u
+		join user_cando uc on (u.user_id = uc.user_id)
+		where u.isdel = 0 and uc.is_delete = 0
+		<if test="user_id != null and user_id != ''">
+			and u.user_id = #{user_id}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and u.user_name like '%${user_name}%'
+		</if>
+	</select>
+	<update id="deleteAdministrator" parameterType="com.zp.jdb.entity.Alltable">
+		update user_cando set is_delete = 1 where user_id = #{user_id}
+	</update>
+	<select id="selectPutongUser" resultType="com.zp.jdb.entity.Alltable" parameterType="com.zp.jdb.entity.Alltable">
+		select u.user_id,u.user_name,u.phoneNumber,u.email from administrators u
+		where u.isdel = 0 and u.user_id not in (select user_id from user_cando where is_delete = 0)
+		<if test="user_id != null and user_id != ''">
+			and u.user_id = #{user_id}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and u.user_name like '%${user_name}%'
+		</if>
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and u.phoneNumber like '%${phoneNumber}%'
+		</if>
+		limit #{startIndex},#{pagecount}
+	</select>
+	<select id="selectAdminTotalCount2" resultType="int" parameterType="com.zp.jdb.entity.Alltable">
+		select count(u.user_id)
+		from administrators u
+		where u.isdel = 0 and u.user_id not in (select user_id from user_cando where is_delete = 0)
+		<if test="user_id != null and user_id != ''">
+			and u.user_id = #{user_id}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and u.user_name like '%${user_name}%'
+		</if>
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and u.phoneNumber like '%${phoneNumber}%'
+		</if>
+	</select>
+	<select id="selectAllUser" resultType="com.zp.jdb.entity.Alltable" parameterType="com.zp.jdb.entity.Alltable">
+		select u.user_id,u.user_name,u.phoneNumber,u.email from user u
+		where u.isdel = 0 
+		<if test="user_id != null and user_id != ''">
+			and u.user_id = #{user_id}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and u.user_name like '%${user_name}%'
+		</if>
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and u.phoneNumber like '%${phoneNumber}%'
+		</if>
+		limit #{startIndex},#{pagecount}
+	</select>
+	<select id="selectAdminTotalCount3" resultType="int" parameterType="com.zp.jdb.entity.Alltable">
+		select count(u.user_id)
+		from user u
+		where u.isdel = 0 
+		<if test="user_id != null and user_id != ''">
+			and u.user_id = #{user_id}
+		</if>
+		<if test="user_name != null and user_name != ''">
+			and u.user_name like '%${user_name}%'
+		</if>
+		<if test="phoneNumber != null and phoneNumber != ''">
+			and u.phoneNumber like '%${phoneNumber}%'
+		</if>
+	</select>
+	<select id="selectGroupID" resultType="com.zp.jdb.entity.Alltable">
+		select group_id,group_name from groups where is_delete = 0;
+	</select>
+	<select id="selectPowerID" resultType="com.zp.jdb.entity.Alltable">
+		select power_id, power_name from powers where is_delete = 0;
+	</select>
+	<select id="selectOperateID" resultType="com.zp.jdb.entity.Alltable">
+		select operate_id, operate_name from operates where is_delete = 0;
+	</select>
+	<insert id="insertAllAdmin" parameterType="com.zp.jdb.entity.Alltable">
+		insert into user_cando
+		(user_id ,allpower_id, alloperate_id, admin)
+		values
+		( #{user_id}, #{allpower_id}, #{alloperate_id}, 2 )
+	</insert>
+	<select id="selectGuanliyuanguanliID" resultType="long">
+		select group_id from groups where group_name = "管理员管理组" and is_delete = 0;
+	</select>
+	<select id="selectJigouguanliPowerID" resultType="com.zp.jdb.entity.Alltable" parameterType="long">
+		SELECT p.power_id, p.power_name FROM powers p
+		join group_power gp on(p.power_id = gp.power_id)
+		where gp.group_id != #{group_id} and gp.is_delete = 0 and p.is_delete = 0
+	</select>
+	<select id="selectJigouguanliOperateID" resultType="com.zp.jdb.entity.Alltable" parameterType="long">
+		select o.operate_id from powers p
+		join group_power gp on(p.power_id = gp.power_id)
+		join operates_powers op on(p.power_id = op.power_id)
+		join operates o ON(op.operate_id = o.operate_id)
+		where gp.group_id != #{group_id}
+		and gp.is_delete = 0 and p.is_delete = 0 and op.is_delete = 0 and o.is_delete = 0
+	</select>
+	<insert id="insertJigouAdmin" parameterType="com.zp.jdb.entity.Alltable">
+		insert into user_cando
+		(user_id, allpower_id, alloperate_id, admin)
+		values
+		( #{user_id}, #{allpower_id}, #{alloperate_id}, 3 )
+	</insert>
+	<select id="selectPowerAndOperate" resultType="com.zp.jdb.entity.Alltable">
+		select p.power_id,p.power_name,o.operate_id,o.operate_name
+		from powers p
+		join operates_powers op on(op.power_id = p.power_id)
+		join operates o on(o.operate_id = op.operate_id)
+		where p.is_delete = 0 and o.is_delete = 0 and op.is_delete = 0
+		group by p.power_id,p.power_name,o.operate_id,o.operate_name
+	</select>
+	<select id="selectAdminPower" resultType="String" parameterType="com.zp.jdb.entity.Alltable">
+		select allpower_id from user_cando where user_id = #{user_id} and is_delete = 0
+	</select>
+	<select id="selectAdminOperate" resultType="String" parameterType="com.zp.jdb.entity.Alltable">
+		select alloperate_id from user_cando where user_id = #{user_id}	and is_delete = 0
+	</select>
+	<update id="updatePower" parameterType="com.zp.jdb.entity.Alltable">
+		update user_cando set allpower_id = #{allpower_id}, alloperate_id = #{alloperate_id}
+		where user_id = #{user_id} and is_delete = 0;
+	</update>
+	<select id="selectXuanAdmin" resultType="int" parameterType="com.zp.jdb.entity.Alltable">
+		select admin from user_cando where user_id = #{user_id} and is_delete = 0
+	</select>
+	<select id="selectjigouIDbyUserID" parameterType="int" resultType="String">
+		select orgId from administrators admin
+		join user_org uo on (admin.user_id = uo.user_id)
+		where admin.user_id = #{user_id}
+	</select>
+</mapper>
+

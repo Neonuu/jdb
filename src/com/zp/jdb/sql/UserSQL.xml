@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.user.UserDao">
+
+	<!--增加用户 -->
+	<insert id="addUser" parameterType="com.zp.jdb.entity.user.User">
+		INSERT into
+		user(phoneNumber,password) values(#{phoneNumber},#{password})
+	</insert>
+	<!-- 动态查询用户 -->
+	<select id="findUser" parameterType="com.zp.jdb.entity.user.User"
+		resultType="com.zp.jdb.entity.user.User">
+		SELECT * from user
+		<where>
+			<if test="user_name!=null"> and user_name = #{user_name} </if>
+			<if test="password!=null"> and password = #{password} </if>
+			<if test="phoneNumber!=null"> and phoneNumber = #{phoneNumber} </if>
+			<if test="image_address!=null"> and image_address = #{image_address} </if>
+			<if test="email!=null"> and email = #{email} </if>
+			<if test="province!=null">
+				and province = #{province}
+			</if>
+			<if test="city!=null"> and city = #{city}
+			</if>
+			<if test="user_status!=null"> and user_status = #{user_status} </if>
+			<if test="limit!=null"> and `limit` = #{limit} </if>
+			<if test="isdel!=null">
+				and `isdel` = #{isdel}
+			</if>
+		</where>
+	</select>
+	<!-- 根据用户id查询用户 -->
+	<select id="findUserById" parameterType="integer"
+		resultType="com.zp.jdb.entity.user.User">
+		SELECT * from user WHERE user_id=#{user_id}
+	</select>
+	<!--动态更新用户,根据电话号 -->
+	<update id="updataUser" parameterType="com.zp.jdb.entity.user.User">
+		UPDATE user
+		<set>
+			<if test="user_name!=null">
+				user_name = #{user_name},
+			</if>
+			<if test="password!=null">
+				password = #{password},
+			</if>
+			<if test="phoneNumber!=null">
+				phoneNumber = #{phoneNumber},
+			</if>
+			<if test="image_address!=null">
+				image_address = #{image_address},
+			</if>
+			<if test="email!=null">
+				email = #{email},
+			</if>
+			<if test="province!=null">
+				province = #{province},
+			</if>
+			<if test="city!=null">
+				city = #{city},
+			</if>
+			<if test="user_status!=null">
+				user_status = #{user_status},
+			</if>
+			<if test="limit!=null">
+				`limit` = #{limit},
+			</if>
+			<if test="isdel!=null">
+				`isdel` = #{isdel},
+			</if>
+		</set>
+		WHERE phoneNumber = #{phoneNumber}
+	</update>
+	<!-- 删除用户 -->
+	<update id="delUser" parameterType="com.zp.jdb.entity.user.User">
+		UPDATE user
+		SET isdel=1
+		WHERE
+		phoneNumber = #{phoneNumber}
+	</update>
+	<!-- 查询用户的所有客户 -->
+	<select id="findUser_customer" parameterType="com.zp.jdb.entity.user.User"
+		resultType="com.zp.jdb.entity.user.Customer">
+		SELECT c.customer_id c.customer_name c.customer_cid
+		c.user_id c.isdel
+		FROM
+		`user` u,customer c WHERE phoneNumber =
+		#{phoneNumber} and
+		u.user_id=c.user_id
+	</select>
+	<!-- 查询交单量排行 -->
+	<!-- 此语句查询出来的是一个表格，有两个字段phoneNumber和 order_id，然后我新建一个类，里面就有这两个字段属性就可以 -->
+	<select id="queryJiaoDanLiang" resultType="com.zp.jdb.entity.user.UserJiaoDanLiangNum">
+		SELECT
+		u.phoneNumber,u.user_name,o.order_id FROM `user`
+		u LEFT OUTER JOIN `order` o
+		ON
+		u.user_id=o.user_id AND o.order_status=0 GROUP BY u.phoneNumber
+	</select>
+	
+	<select id="findByPhoneNumber" parameterType="string" resultType="Long">
+	  select user_id from user where phoneNumber=#{phoneNumber}
+	</select>
+</mapper>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.NewOrderlnHoursDao">
+	<select id="jiaodanliangPH" resultType="com.zp.jdb.entity.Jiaodanliang">
+			SELECT * FROM tongjihe ORDER BY zong desc
+			limit #{startIndex},#{pagecount}
+	</select>
+	<select id="chengjiaoliangPH" resultType="com.zp.jdb.entity.Order_inHours">
+		select a.*, @rank:=@rank+1 as pm from
+		(
+		select t.user_phoneNumber, t.ord, u.user_name from user u
+		join
+		(
+		select oi.user_id, oi.user_phoneNumber, count(*) as ord from order_inhours oi
+		where oi.`status` in(3,4)
+		group by user_id
+		order by ord desc
+		) t
+		on (u.user_id = t.user_id)
+		) a,
+		(select @rank:=#{startIndex})b
+		limit #{startIndex},#{pagecount}
+	</select>
+	<select id="chengjiaoerPH" resultType="com.zp.jdb.entity.Order_inHours">
+		select a.*, @rank:=@rank+1 as pm from
+		(
+		select t.user_phoneNumber, t.ord, u.user_name from user u
+		join
+		(
+		select oi.user_id, oi.user_phoneNumber, SUM(money) as ord from order_inhours oi
+		where oi.`status` = 4
+		group by user_id
+		order by ord desc
+		) t
+		on (u.user_id = t.user_id)
+		) a,
+		(select @rank:=#{startIndex})b
+		limit #{startIndex},#{pagecount}
+	</select>
+	<select id="jiaodanfy" resultType="int">
+		SELECT count(*) FROM tongjihe ORDER BY zong desc
+	</select>
+	<select id="chengjiaofy" resultType="int">
+		select count(distinct oi.user_id) from order_inhours oi where oi.status in (3,4)
+	</select>
+	<select id="moneyfy" resultType="int">
+		select count(distinct oi.user_id) from order_inhours oi where oi.status in (3,4)
+	</select>
+</mapper>

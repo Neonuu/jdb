@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.AdministratorsDao">
+    <select id="selectLogin" resultType="int" parameterType="com.zp.jdb.entity.Administrators">
+    	select count(*) from Administrators where loginName = #{loginName}
+		and loginPass = #{loginPass} and isdel = 0;
+    </select>
+    <select id="selectUserID" resultType="com.zp.jdb.entity.Administrators" parameterType="com.zp.jdb.entity.Administrators">
+    	select * from Administrators where loginName = #{loginName} and isdel = 0;
+    </select>
+    <select id="selectCountLoginName" resultType="int" parameterType="com.zp.jdb.entity.Administrators">
+    	select count(*) from Administrators where loginName = #{loginName} and isdel = 0;
+    </select>
+    <insert id="insertUnOperateAdmin" parameterType="com.zp.jdb.entity.Administrators">
+    	insert into Administrators
+    	(user_name ,loginName, loginPass, email, phoneNumber)
+		values
+		( #{user_name}, #{loginName}, #{loginPass}, #{email}, #{phoneNumber});
+    </insert>
+    
+    
+    <select id="findById" parameterType="Long" resultType="com.zp.jdb.entity.Administrators">
+       select * from Administrators where user_id=#{user_id}
+    </select>
+    
+    <select id="findByLoginName" parameterType="string" resultType="com.zp.jdb.entity.Administrators" >
+       select * from Administrators where loginName=#{loginName} and isdel = 0
+    </select>
+    <select id="selectPass" parameterType="com.zp.jdb.entity.Administrators" resultType="int">
+    	select count(*) from Administrators where loginName=#{loginName} and phoneNumber=#{phoneNumber} and isdel = 0
+    </select>
+    <select id="selectAdminID" parameterType="com.zp.jdb.entity.Administrators" resultType="Long">
+    	select user_id from Administrators where loginName=#{loginName} and phoneNumber=#{phoneNumber} and isdel = 0
+    </select>
+    <update id="updatePass" parameterType="com.zp.jdb.entity.Administrators">
+    	update Administrators set loginPass = #{loginPass}
+    	where user_id = #{user_id} and isdel = 0
+    </update>
+</mapper>

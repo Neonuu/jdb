@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.Change_system_param_recordDao">
+
+ 
+   <insert id="addRecord" parameterType="com.zp.jdb.entity.Change_system_param_record">
+       insert into change_system_param_record(old_user_scale,new_user_scale,old_recommend_scale,new_recommend_scale,old_commission_quota,new_commission_quota,add_time,auditer_id)
+       values(#{old_user_scale},#{new_user_scale},#{old_recommend_scale},#{new_recommend_scale},#{old_commission_quota},#{new_commission_quota},#{add_time},#{auditer_id})
+   </insert>
+
+
+    <select id="findAllByLimit" resultType="com.zp.jdb.entity.Change_system_param_record" parameterType="map">
+        select * from  change_system_param_record where  is_del=0  order by add_time  desc limit #{number}, #{pageSize}
+   </select>
+    
+   <select id="findAll" resultType="int" >
+        select count(*) from  change_system_param_record where is_del=0  
+   </select>
+
+   
+
+</mapper>

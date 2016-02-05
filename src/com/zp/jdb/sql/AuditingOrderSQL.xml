@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.orderDao">
+	<select id="Statistics" resultType="com.zp.jdb.entity.Auditing_order" >
+		 select user_id, COUNT(order_number) c,SUM(money) s, DATE_FORMAT(t.add_time,'%Y-%m') month,count(t.id) minute 
+		 from auditing_order t
+         where t.status=3 or t.status=4
+         AND  DATE_FORMAT(add_time,'%Y-%m')>
+         DATE_FORMAT(date_sub(curdate(), interval 12 month),'%Y-%m')
+         group by user_id,month
+	</select>
+</mapper>

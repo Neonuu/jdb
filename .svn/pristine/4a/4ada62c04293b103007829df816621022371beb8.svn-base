@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>  
+ <!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.OrganizationDao">
+    
+    <insert id="insertOrganization" parameterType="map">
+    INSERT INTO show_org (orgName,orgLogo,maxRebate,area,statements,isdel,creditEnquiryCost,doorServiceCost,loanHandCost) 
+    VALUES (#{orgName},#{orgLogo},#{maxRebate},#{area},#{statements},#{isdel},#{creditEnquiryCost},#{doorServiceCost},#{loanHandCost})
+    </insert>
+
+    <sql id="org_query_conditioin">
+        isdel = 0
+		<if test="orgId != null and orgId != ''">
+			and orgId = #{orgId}
+		</if>
+		<if test="orgName != null and orgName != ''">
+			and orgName like '%${orgName}%'
+		</if>
+		<if test="area != null and area != ''">
+			and area like '%${area}%'
+		</if>
+	</sql>
+	<select id="selectOrganizationsByCondition" resultType="com.zp.jdb.entity.Organization" parameterType="map">
+		SELECT * FROM show_org <where>
+		  <include refid="org_query_conditioin"/>
+		</where>  limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+	<sql id="org2_query_conditioin">
+        isdel = 0
+		<if test="orgId != null and orgId != ''">
+			and find_in_set(orgId,#{orgId})
+		</if>
+		<if test="orgName != null and orgName != ''">
+			and orgName like '%${orgName}%'
+		</if>
+		<if test="area != null and area != ''">
+			and area like '%${area}%'
+		</if>
+	</sql>
+	<select id="selectOrganizationsByCondition2" resultType="com.zp.jdb.entity.Organization" parameterType="map">
+		SELECT * FROM show_org <where>
+		  <include refid="org2_query_conditioin"/>
+		</where>  limit #{pageIndex} ,#{pageSize}
+	</select>
+	
+	<update id="updateOrganizationIsdelByID" parameterType="map">
+		update show_org set isdel = #{isdel} where orgId = #{orgId}
+	</update>
+	
+	<select id="selectOrganizationByID" resultType="com.zp.jdb.entity.Organization" parameterType="int">
+		SELECT * FROM show_org where orgId = #{orgId} and isdel = 0
+	</select>
+	
+	<select id="selectOrganizationByID2" resultType="com.zp.jdb.entity.Organization" parameterType="int">
+		SELECT * FROM show_org where orgId = #{orgId} and isdel = 1
+	</select>
+	
+	<update id="updateOrganization" parameterType="map">
+	    update show_org  
+	    set orgName = #{orgName}, maxRebate = #{maxRebate}, area = #{area}, creditEnquiryCost = #{creditEnquiryCost}, doorServiceCost = #{doorServiceCost}, loanHandCost = #{loanHandCost} 
+	    where orgId = #{orgId}
+	</update>
+	
+	<select id="selectProductionByOrgId" resultType="com.zp.jdb.entity.Production" parameterType="int">
+		SELECT * FROM pro_list where orgId = #{orgId}
+		where isdel = 0
+	</select>
+	
+	<select id="selectOrganizationTotal" resultType="int" parameterType="map">
+	SELECT COUNT(*) from show_org<where>
+		  <include refid="org_query_conditioin"/>
+		</where>
+	</select>
+	
+		<select id="selectOrganizationTotal2" resultType="int" parameterType="map">
+	SELECT COUNT(*) from show_org<where>
+		  <include refid="org2_query_conditioin"/>
+		</where>
+	</select>
+	
+	<update id="updateOrganizationLogo" parameterType="map">
+	    update show_org  
+	    set orgLogo = #{orgLogo}
+	    where orgId = #{orgId}
+	</update>
+	
+	<select id="selectExistOrgList" resultType="com.zp.jdb.entity.Organization">
+	SELECT * FROM show_org where isdel = 0;
+	</select>
+	
+	<select id="selectExistOrgList2" resultType="com.zp.jdb.entity.Organization" parameterType="map">
+	SELECT * FROM show_org where isdel = 0 and find_in_set(orgId,#{orgId});
+	</select>
+	
+	<select id="selectOrgByUser" resultType="String" parameterType="int">
+	SELECT orgId FROM user_org where user_id = #{user_id};
+	</select>
+	
+	<update id="updateOrganizationState2ByID" parameterType="int">
+		update show_org set statements = 2 where orgId = #{orgId}
+	</update>
+	
+	<update id="updateOrganizationState0ByID" parameterType="int">
+		update show_org set statements = 0 where orgId = #{orgId}
+	</update>
+	
+	<update id="updateOrganizationRebateByID" parameterType="map">
+		update show_org set maxrebate = #{maxrebate} where orgId = #{orgId}
+	</update>
+	
+	<insert id="insertUserOrg" parameterType="map">
+    INSERT INTO user_org (user_id,orgId) 
+    VALUES (#{user_id},#{orgId})
+    </insert>
+    
+    <select id="selectUserOrg" resultType="com.zp.jdb.entity.User_Org" parameterType="int">
+	SELECT * FROM user_org where user_id = #{user_id};
+	</select>
+	
+	<update id="updateUserOrg" parameterType="map">
+		update user_org set orgId = #{orgId} where user_id = #{user_id}
+	</update>
+	
+
+
+	
+	
+	
+	
+	
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.HouseInformationDao">
+    <insert id="insertHouseInfo" parameterType="com.zp.jdb.entity.Housing">
+    	insert into Housing
+    	(housingID, housingName, housingAddress, housingFCZ, Cnotear, customerid, order_number, add_time)
+		values
+		( #{housingID}, #{housingName}, #{housingAddress}, #{housingFCZ}, #{cnotear}, #{customerid}, #{order_number}, #{add_time});
+    </insert>
+    <update id="updateStatus" parameterType="long">
+    	update order_inhours set status_cailiao = 1 where id = #{id}
+    </update>
+   
+    <select id="findUser_id"  parameterType="string" resultType="com.zp.jdb.entity.CustomerO">
+        select * from customer where passport = #{passport}  and isdel = 0
+    </select>
+    
+    <select id="findByOrderNumber" resultType="com.zp.jdb.entity.Housing" parameterType="string">
+        select * from Housing where order_number=#{order_number}
+    </select>
+    
+    <insert id="insertHouseImg" parameterType="com.zp.jdb.entity.Img_forhouse" >
+    	insert into img_forhouse
+    	(img, order_number)
+		values
+		(#{img}, #{order_number});
+    </insert>
+</mapper>

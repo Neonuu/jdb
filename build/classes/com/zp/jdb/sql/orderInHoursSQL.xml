@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.OrderlnHoursDao">
+    
+    <sql id="tiaoJian">
+		<if test="user_phoneNumber != null and user_phoneNumber != ''">
+			and user_phoneNumber like '%${user_phoneNumber}%'
+		</if>
+		<if test="order_number != null and order_number != ''">
+			and order_number like '%${order_number}%'
+		</if>
+		<if test="user_identity != null and user_identity != ''">
+			and user_identity = #{user_identity}
+		</if>
+		<if test="product != null and product != ''">
+			and product like '%${product}%'
+		</if>
+		<if test="user_idCardNumber != null and user_idCardNumber != ''">
+			and user_idCardNumber like '%${user_idCardNumber}%'
+		</if>
+		<if test="true_name != null and true_name != ''">
+			and true_name like '%${true_name}%'
+		</if>
+		<if test="province != null and province != ''">
+			and province like '%${province}%'
+		</if>
+		<if test="city != null and city != ''">
+			and city like '%${city}%'
+		</if>
+		<if test="add_time != null and add_time != ''">
+			and add_time &lt; #{add_time2} and add_time &gt; #{add_time1} 
+		</if>
+		<if test="auditer_name != null and auditer_name != ''">
+			and auditer_name like '%${auditer_name}%'
+		</if>
+		<if test="jigou_id != null">
+		    and find_in_set(jigou_id, #{jigou_id})
+		</if>
+		<if test="status_cailiao != null and status_cailiao != ''">
+			and status_cailiao = #{status_cailiao}
+		</if>
+	</sql>
+    
+    <select id="findAllByLimit" resultType="com.zp.jdb.entity.Order_inHours"  parameterType="map">
+       select * from order_inHours <where> is_del=0 and status=#{status}
+          <include refid="tiaoJian"/>
+       </where> order by add_time desc limit #{number} ,#{pageSize}
+    </select>
+	
+	<select id="findAll" resultType="int" parameterType="map">
+       select count(*) from order_inHours  
+       <where>  <include refid="tiaoJian"/> and is_del=0 and status=#{status}</where>
+    </select>
+    
+    <select id="findOrderByIdCardNumberAndProdect" parameterType="com.zp.jdb.entity.Order_inHours" resultType="com.zp.jdb.entity.Order_inHours">
+       select * from order_inHours where product=#{product} and user_idCardNumber=#{user_idCardNumber} and jigou_id=#{jigou_id} and status=0 and is_del=0
+    </select>
+    
+    <select id="findOrderById" parameterType="long" resultType="com.zp.jdb.entity.Order_inHours">
+       select * from order_inHours where id=#{id} and is_del=0 
+    </select>
+    
+    <select id="findOrderByIdAndStatus" parameterType="long" resultType="com.zp.jdb.entity.Order_inHours">
+        select * from order_inHours where id=#{id} and status=0 and is_del=0 
+    </select>
+    
+    <update id="changOrderStatus" parameterType="com.zp.jdb.entity.Auditing_order">
+        update  order_inHours set status=#{status},add_time=#{add_time},auditer_name=#{auditer_name}
+        <if  test="remarks != null and remarks != ''">
+            ,remarks=#{remarks}
+        </if>
+        <if test="money != null">
+           ,money=#{money}
+        </if>
+       where id=#{id}
+   </update>
+    
+    <delete id="delOrderById" parameterType="long">
+       delete from order_inHours  where id=#{id};
+    </delete>
+    
+    <insert id="addOrder" parameterType="com.zp.jdb.entity.Auditing_order">
+       insert into order_inHours(user_id,user_phoneNumber,order_number,user_identity,product,true_name,user_idCardNumber,tel_number,province,city,add_time,status_cailiao,auditer_name,status,money,remarks,jigou_id)
+       values(#{user_id},#{user_phoneNumber},#{order_number},#{user_identity},#{product},#{true_name},#{user_idCardNumber},#{tel_number},#{province},#{city},#{add_time},1,#{auditer_name},#{status},#{money},#{remarks},#{jigou_id})
+    </insert>
+    
+    
+    
+    
+    <select id="selectByID_Name" parameterType="com.zp.jdb.entity.Production" resultType="com.zp.jdb.entity.Production">
+    	select * from pro_list where proName = #{proName} and orgId = #{orgId}
+    </select>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.zp.jdb.dao.tranDao">
+    <select id="selectMsgTotalCount" resultType="int" parameterType="com.zp.jdb.entity.Sends_sms">
+		SELECT count(*) FROM sms_tran where 1=1
+		<if test="info != null and info != ''">
+			and info = #{info}
+		</if>
+	</select>
+	<select id="findAll" resultType="com.zp.jdb.entity.Sends_sms" parameterType="com.zp.jdb.entity.Sends_sms">
+    	SELECT * FROM sms_tran  where 1=1 
+    	<if test="info != null and info != ''">
+			and info = #{info}
+		</if>
+		order by send_time desc
+    	limit #{startIndex},#{pagecount}
+    </select>
+</mapper>

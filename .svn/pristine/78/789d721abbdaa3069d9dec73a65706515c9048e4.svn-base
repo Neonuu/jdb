@@ -1,0 +1,164 @@
+package com.zp.jdb.entity;
+
+import java.util.Date;
+
+public class Car {
+	
+	private int carID;
+	
+	private int customerID;
+	
+	private String carbrand;
+	
+	private String carxilie;
+	
+	private String carModel;
+	
+	private String carNiandai;
+	
+	private String carframe;
+	
+	private String cnotear;
+	
+	private String order_number;
+	
+    private String true_name;
+	
+	private String tel_number;
+	
+	private String user_idCardNumber;
+	
+	private Integer status;
+	
+	private Date add_time;
+	
+	private String photo;
+
+	public int getCarID() {
+		return carID;
+	}
+
+	public void setCarID(int carID) {
+		this.carID = carID;
+	}
+
+	public int getCustomerID() {
+		return customerID;
+	}
+
+	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
+	}
+
+	public String getCarbrand() {
+		return carbrand;
+	}
+
+	public void setCarbrand(String carbrand) {
+		this.carbrand = carbrand;
+	}
+
+	public String getCarxilie() {
+		return carxilie;
+	}
+
+	public void setCarxilie(String carxilie) {
+		this.carxilie = carxilie;
+	}
+
+	public String getCarModel() {
+		return carModel;
+	}
+
+	public void setCarModel(String carModel) {
+		this.carModel = carModel;
+	}
+
+	public String getCarNiandai() {
+		return carNiandai;
+	}
+
+	public void setCarNiandai(String carNiandai) {
+		this.carNiandai = carNiandai;
+	}
+
+	public String getCarframe() {
+		return carframe;
+	}
+
+	public void setCarframe(String carframe) {
+		this.carframe = carframe;
+	}
+
+	public String getCnotear() {
+		return cnotear;
+	}
+
+	public void setCnotear(String cnotear) {
+		this.cnotear = cnotear;
+	}
+
+	public String getOrder_number() {
+		return order_number;
+	}
+
+	public void setOrder_number(String order_number) {
+		this.order_number = order_number;
+	}
+
+	public Date getAdd_time() {
+		return add_time;
+	}
+
+	public void setAdd_time(Date add_time) {
+		this.add_time = add_time;
+	}
+
+	public String getPhoto() {
+		return photo;
+	}
+
+	public void setPhoto(String photo) {
+		this.photo = photo;
+	}
+
+	public String getTrue_name() {
+		return true_name;
+	}
+
+	public void setTrue_name(String true_name) {
+		this.true_name = true_name;
+	}
+
+	public String getTel_number() {
+		return tel_number;
+	}
+
+	public void setTel_number(String tel_number) {
+		this.tel_number = tel_number;
+	}
+
+	public String getUser_idCardNumber() {
+		return user_idCardNumber;
+	}
+
+	public void setUser_idCardNumber(String user_idCardNumber) {
+		this.user_idCardNumber = user_idCardNumber;
+	}
+
+	public Integer getStatus() {
+		return status;
+	}
+
+	public void setStatus(Integer status) {
+		this.status = status;
+	}
+    
+	
+	
+	
+	
+	
+	
+
+}
